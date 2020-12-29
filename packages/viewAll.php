@@ -92,7 +92,7 @@
                             
                             <div class="form-group">
                                 <label for="amount">Package Amount</label>
-                                <input type="text" class="form-control" id="amountEdit" name="amountEdit" aria-describedby="emailHelp">
+                                <input type="text" class="form-control" id="amountEdit" name="amountEdit" aria-describedby="emailHelp" maxlength="6">
                             </div>
 
                             <div class="form-group">
@@ -323,6 +323,25 @@
                     $(this).remove(); 
                 });
             }, 3000);
+            });
+            
+            $('input[name="amountEdit"]').keydown(function () {    
+
+                if ( event.ctrlKey || event.altKey 
+                    || (47<event.keyCode && event.keyCode<58 && event.shiftKey==false) 
+                    || (95<event.keyCode && event.keyCode<106)
+                    || (event.keyCode==8) || (event.keyCode==9) 
+                    || (event.keyCode>34 && event.keyCode<40) 
+                    || (event.keyCode==46) )
+                    return;
+                if ((event.keyCode < 48 || event.keyCode > 57))
+                    event.preventDefault();
+
+                var length = $(this).val().length;
+
+                if (length == 5 || length == 13)
+                    $(this).val($(this).val() + '-');
+
             });
             
         </script>

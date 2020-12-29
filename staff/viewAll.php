@@ -13,7 +13,7 @@
     if (isset($_POST['deleteData'])) {
         
         $snoDelete = $_POST['snoDelete'];
-        $sql = "DELETE FROM `payment` WHERE `id` = $snoDelete";
+        $sql = "DELETE FROM `staff` WHERE `id` = $snoDelete";
         $result = mysqli_query($conn, $sql);
         
         
@@ -31,12 +31,14 @@
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if (isset($_POST['snoEdit'])) {
             $sno = $_POST["snoEdit"];
-            $members = mysqli_real_escape_string($conn, $_POST["memberEdit"]);
-            $paymentOfMonth = mysqli_real_escape_string($conn, $_POST["paymentOfMonth"]);
-            $isPaymentCleared = mysqli_real_escape_string($conn, $_POST["isPaymentCleared"]);
-            $paymentDate = mysqli_real_escape_string($conn, $_POST["paymentDate"]);
+            $firstName = mysqli_real_escape_string($conn, $_POST["firstNameEdit"]);
+            $lastName = mysqli_real_escape_string($conn, $_POST["lastNameEdit"]);
+            $joinDate = mysqli_real_escape_string($conn, $_POST["joinDateEdit"]);
+            $contactNo = "+923" . mysqli_real_escape_string($conn, $_POST["contactNoEdit"]);
+            $cnic = mysqli_real_escape_string($conn, $_POST["cnicEdit"]);
+            $salary = mysqli_real_escape_string($conn, $_POST["salaryEdit"]);
             
-            $sql = "UPDATE `payment` SET `members` = $members, `paymentOfMonth` = '$paymentOfMonth', `isPaymentCleared` = $isPaymentCleared, `paymentDate` = '$paymentDate' WHERE `payment`.`id` = $sno";            
+            $sql = "UPDATE `staff` SET `firstName` = '$firstName', `lastName` = '$lastName', `joinDate` = '$joinDate', `contactNo` = '$contactNo', `cnic` = '$cnic', `salary` = $salary WHERE `staff`.`id` = $sno";
             
             $result = mysqli_query($conn, $sql);
             if ($result) {
@@ -52,7 +54,7 @@
 <html lang="en">
 
     <head>
-        <title>VIEW PAYMENT :: Gym Management System</title>
+        <title>VIEW STAFF MEMBER :: Gym Management System</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -79,7 +81,7 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="editModalLabel">Edit This Payment</h5>
+                        <h5 class="modal-title" id="editModalLabel">Edit This Member</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">×</span>
                         </button>
@@ -89,47 +91,37 @@
                             <input type="hidden" name="snoEdit" id="snoEdit">
                             
                             <div class="form-group">
-                                <label for="amount">Member</label>
-                                <select name="memberEdit" id="select" class="form-control">
-                                    <option value="0">Select Member</option>
-                                    <?php 
-                                        $sql = "SELECT * FROM `members`";
-                                        $result = mysqli_query($conn, $sql);
-                                        while ($row = mysqli_fetch_assoc($result)) {
-                                            echo '<option value="' . $row['id'] . '">' . $row['firstName'] . ' ' . $row['lastName'] . '</option>';
-                                        }
-                                    ?>
-                                </select>
+                                <label for="firstNameEdit">First Name</label>
+                                <input type="text" class="form-control" id="firstNameEdit" name="firstNameEdit">
                             </div>
                             
                             <div class="form-group">
-                                <label for="amount">Payment Of Month</label>
-                                <select name="paymentOfMonth" id="month" class="form-control">
-                                    <option value="0">Select Month</option>
-                                    <option value="January">January</option>
-                                    <option value="February">February</option>
-                                    <option value="March">March</option>
-                                    <option value="April">April</option>
-                                    <option value="May">May</option>
-                                    <option value="June">June</option>
-                                    <option value="July">July</option>
-                                    <option value="August">August</option>
-                                    <option value="September">September</option>
-                                    <option value="October">October</option>
-                                    <option value="November">November</option>
-                                    <option value="December">December</option>
-                                </select>
+                                <label for="lastNameEdit">Last Name</label>
+                                <input type="text" class="form-control" id="lastNameEdit" name="lastNameEdit">
+                            </div>
+                            
+                            
+                            <div class="form-group">
+                                <label for="joinDateEdit">Join Date</label>
+                                <input type="text" class="form-control" id="joinDateEdit" name="joinDateEdit" onfocus="(this.type = 'date')" onblur="(this.type = 'text')">
                             </div>
                             
                             <div class="form-group">
-                                <label for="isPaymentCleared">Is Payment Cleared: &nbsp;</label> 
-                                <label class="radio-inline"><input type="radio" id="memYes" name="isPaymentCleared" value="1">&nbsp;YES</label>
-                                <label class="radio-inline"><input type="radio" id="memNo" name="isPaymentCleared" value="0">&nbsp;NO</label>
-                            </div>                             
+                                <label for="contactNoEdit">Contact No.</label>
+                                <div class="input-group">
+                                    <span class="input-group-text" style="color: white; background-color: black;padding: 7px 12px 7px 12px;border-top-left-radius: 15px;border-bottom-left-radius: 15px;">+923</span>
+                                    <input type="text" class="form-control" id="contactNoEdit" name="contactNoEdit" MaxLength="10" >
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="cnicEdit">CNIC</label>
+                                <input type="text" class="form-control" id="cnicEdit" name="cnicEdit" MaxLength="15">
+                            </div>
                             
                             <div class="form-group">
-                                <label for="paymentDate">Payment Date</label>
-                                <input type="text" class="form-control" id="paymentDate" name="paymentDate" onfocus="(this.type = 'date')" onblur="(this.type = 'text')">
+                                <label for="salaryEdit">Salary</label>
+                                <input type="text" class="form-control" id="salaryEdit" name="salaryEdit" MaxLength="5">
                             </div>
                             
                         </div>
@@ -149,7 +141,7 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">                        
-                        <h5 class="modal-title" id="deleteModalLabel"> Are You Sure You Want To Delete This Payment?</h5>
+                        <h5 class="modal-title" id="deleteModalLabel"> Are You Sure You Want To Delete This Staff Member?</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">×</span>
                         </button>
@@ -160,7 +152,7 @@
                         </div>
                         <div class="modal-footer d-block mr-auto">
                             <button type="button" class="btn waves-effect waves-light hor-grd btn-grd-info" data-dismiss="modal"> NO </button>
-                            <button type="submit" name="deleteData" class="btn waves-effect waves-light hor-grd btn-grd-danger">YES!! Delete Payment</button>
+                            <button type="submit" name="deleteData" class="btn waves-effect waves-light hor-grd btn-grd-danger">YES!! Delete Staff Member</button>
                         </div>
                     </form>
                 </div>
@@ -182,7 +174,7 @@
                                     <div class="row align-items-center">
                                         <div class="col-md-8">
                                             <div class="page-header-title">
-                                                <h5 class="m-b-10">Payment</h5>
+                                                <h5 class="m-b-10">Staff</h5>
                                                 <p class="m-b-0">View All Of Them</p>
                                             </div>
                                         </div>
@@ -193,7 +185,7 @@
                                 if ($update) {
                                     echo 
                                     "<div id='updateSuccess' class='alert alert-info alert-dismissible fade show' role='alert'>
-                                        <strong>SUCCESS!</strong> PAYMENT UPDATES
+                                        <strong>SUCCESS!</strong> STAFF MEMBER UPDATES
                                         <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
                                           <span aria-hidden='true'>×</span>
                                         </button>
@@ -202,7 +194,7 @@
                                 if ($delete) {
                                     echo 
                                     "<div id='deleteSuccess' class='alert alert-danger alert-dismissible fade show' role='alert'>
-                                        <strong>SUCCESS!</strong> PAYMENT DELETED
+                                        <strong>SUCCESS!</strong> STAFF MEMBER DELETED
                                         <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
                                           <span aria-hidden='true'>×</span>
                                         </button>
@@ -219,7 +211,7 @@
                                                 <div class="col-12">
                                                     <div class="card">
                                                         <div class="card-header">
-                                                            <h5>Currently Existing Payments</h5>
+                                                            <h5>Currently Existing Staff Members</h5>
 <!--                                                            <span><code></code></span>-->
                                                             <div class="card-header-right">
                                                                 <ul class="list-unstyled card-option">
@@ -231,35 +223,34 @@
                                                         </div>
                                                         <div class="card-block table-border-style">
                                                             <div class="table-responsive">
-                                                                <table class="table table-hover" id="tblPayment">
+                                                                <table class="table table-hover" id="tblStaffMembers">
                                                                     <thead>
                                                                         <tr>
                                                                             <th>SNo</th>
-                                                                            <th>Members</th>
-                                                                            <th>Payment Of Month</th>
-                                                                            <th>Is Payment Cleared</th>
-                                                                            <th>Payment Date</th>
-                                                                            <th style="display: none;">&nbsp;</th>
-                                                                            <th style="display: none;">&nbsp;</th>
+                                                                            <th>First Name</th>
+                                                                            <th>Last Name</th>
+                                                                            <th>Join Date</th>
+                                                                            <th>Contact No.</th>
+                                                                            <th>CNIC</th>
+                                                                            <th>Salary</th>
                                                                             <th>EDIT/DELETE</th>
                                                                         </tr>
                                                                     </thead>
                                                                     <tbody>
                                                                         <?php
-                                                                        $sql = "SELECT `payment`.`id`, `members`.`id` as `memberId`, CONCAT(`members`.`firstName`, ' ', `members`.`lastName`) as `memberName`, `payment`.`paymentOfMonth`, `payment`.`isPaymentCleared`, `payment`.`paymentDate`, DATE_FORMAT(`payment`.`paymentDate`, '%W, %D %M %Y') AS `paymentDate_` FROM `payment` JOIN `members` ON `payment`.`members` = `members`.`id`;";
+                                                                        $sql = "SELECT *, DATE_FORMAT(`staff`.`joinDate`, '%W, %D %M %Y') AS `joinDate_` FROM `staff`;";
                                                                         $result = mysqli_query($conn, $sql);
                                                                         $sno = 0;
                                                                         while ($row = mysqli_fetch_assoc($result)) {
                                                                             $sno = $sno + 1;
-                                                                            $payment_ = $row['isPaymentCleared'] == 1 ? "YES" : "NO";
                                                                             echo "<tr>
                                                                                     <th scope='row'>" . $sno . "</th>
-                                                                                    <td>" . $row['memberName'] . "</td>
-                                                                                    <td>" . $row['paymentOfMonth'] . "</td>
-                                                                                    <td>" . $payment_ . "</td>
-                                                                                    <td>" . $row['paymentDate_'] . "</td>
-                                                                                    <td style='display: none;'>" . $row['memberId'] . "</td>
-                                                                                    <td style='display: none;'>" . $row['paymentDate'] . "</td>
+                                                                                    <td>" . $row['firstName'] . "</td>
+                                                                                    <td>" . $row['lastName'] . "</td>
+                                                                                    <td>" . $row['joinDate_'] . "</td>
+                                                                                    <td>" . $row['contactNo'] . "</td>
+                                                                                    <td>" . $row['cnic'] . "</td>
+                                                                                    <td>Rs. " . $row['salary'] . "</td>
                                                                                     <td> 
                                                                                     <button class='edit btn btn-sm waves-effect waves-light hor-grd btn-grd-warning' id=" . $row['id'] . " style='color: #20639B;'>"
                                                                                     . "<i class='far fa-edit'></i> EDIT"
@@ -315,9 +306,7 @@
         <script src="//cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
         <script>
             $(document).ready(function () {
-                $('#tblPayment').DataTable();
-                $('#packageID').hide();
-
+                $('#tblStaffMembers').DataTable();
             });
         </script>
         <script>
@@ -325,21 +314,18 @@
             Array.from(edits).forEach((element) => {
                 element.addEventListener("click", (e) => {
                     tr = e.target.parentNode.parentNode;
-                    member = tr.getElementsByTagName("td")[4].innerText;
-                    $('#select').val(member);
-                    month = tr.getElementsByTagName("td")[1].innerText;
-                    $('#month').val(month);
-                    isPaymentCleared = tr.getElementsByTagName("td")[2].innerText;
-                    if (isPaymentCleared.toString() === "YES") 
-                    {
-                        $('#memYes').prop("checked", true);                     
-                    } 
-                    else if (isPaymentCleared.toString() === "NO")
-                    {
-                        $('#memNo').prop("checked", true);; 
-                    }
-                    paymentDate = tr.getElementsByTagName("td")[5].innerText;
-                    $("#paymentDate").val(paymentDate);
+                    firstName = tr.getElementsByTagName("td")[0].innerText;
+                    firstNameEdit.value = firstName;
+                    lastName = tr.getElementsByTagName("td")[1].innerText;
+                    lastNameEdit.value = lastName;
+                    joinDate = tr.getElementsByTagName("td")[2].innerText;
+                    joinDateEdit.value = joinDate;
+                    contactNo = tr.getElementsByTagName("td")[3].innerText;
+                    contactNoEdit.value = contactNo.substr(3);
+                    cnic = tr.getElementsByTagName("td")[4].innerText;
+                    cnicEdit.value = cnic;      
+                    salary = tr.getElementsByTagName("td")[5].innerText;
+                    salaryEdit.value = salary.substr(4);
                     snoEdit.value = e.target.id;
                     $('#editModal').modal('toggle');
                 });
@@ -374,6 +360,60 @@
                 });
             }, 3000);
             });            
+        </script>
+        <script type="text/javascript">
+            
+            $('input[name="contactNoEdit"]').keydown(function () {    
+    
+                if (event.keyCode == 8 || event.keyCode == 9
+                    || event.keyCode == 27 || event.keyCode == 13
+                    || (event.keyCode == 65 && event.ctrlKey === true))
+                    return;
+                if ((event.keyCode < 48 || event.keyCode > 57))
+                    event.preventDefault();
+
+                var length = $(this).val().length;
+
+                if (length == 2)
+                    $(this).val($(this).val() + '-');
+
+            });
+
+            $('input[name="cnicEdit"]').keydown(function () {    
+
+                if (event.keyCode == 8 || event.keyCode == 9
+                    || event.keyCode == 27 || event.keyCode == 13
+                    || (event.keyCode == 65 && event.ctrlKey === true))
+                    return;
+                if ((event.keyCode < 48 || event.keyCode > 57))
+                    event.preventDefault();
+
+                var length = $(this).val().length;
+
+                if (length == 5 || length == 13)
+                    $(this).val($(this).val() + '-');
+
+            });
+            
+            
+            $('input[name="salaryEdit"]').keydown(function () {    
+
+                if ( event.ctrlKey || event.altKey 
+                    || (47<event.keyCode && event.keyCode<58 && event.shiftKey==false) 
+                    || (95<event.keyCode && event.keyCode<106)
+                    || (event.keyCode==8) || (event.keyCode==9) 
+                    || (event.keyCode>34 && event.keyCode<40) 
+                    || (event.keyCode==46) )
+                    return;
+                if ((event.keyCode < 48 || event.keyCode > 57))
+                    event.preventDefault();
+
+                var length = $(this).val().length;
+
+                if (length == 5 || length == 13)
+                    $(this).val($(this).val() + '-');
+
+            });
         </script>
     </body>
 </html>

@@ -5,7 +5,7 @@
                 <i class="fa fa-bars"></i>
             </a>
 
-            <a href="../dashboard/dashboard.php" style="font-family: 'Shadows Into Light', cursive; font-weight: bold; font-size: 15px;">
+            <a href="../dashboard/dashboard.php" style="font-family: 'Shadows Into Light', cursive; font-weight: bold; font-size: 16px;">
                 Gym Management System
             </a>
             <a class="mobile-options waves-effect waves-light">
@@ -73,11 +73,6 @@
                         <li class="waves-effect waves-light">
                             <a href="../admin/profile.php" style="color: #448aff;">
                                 <i class="fa fa-user-circle"></i> View Profile
-                            </a>
-                        </li>
-                        <li class="waves-effect waves-light">
-                            <a href="../admin/addNewAdministrator.php" style="color: #448aff;">
-                                <i class="fas fa-user-plus"></i> Add New Administrator
                             </a>
                         </li>
                         <li class="waves-effect waves-light">

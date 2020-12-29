@@ -11,7 +11,8 @@
         <div class="">
             <div class="main-menu-header">                                        
                 <div class="user-details">
-                    <span id="more-details"><?php echo $_SESSION['firstName'] . ' ' . $_SESSION['lastName']; ?> (Admin)</span>
+                    <span id="more-details" style="font-size: 25px;"><?php echo $_SESSION['firstName'] . ' ' . $_SESSION['lastName']; ?></span>
+                    <span id="more-details" style="font-size: 15px;">Administrator</span>
                 </div>
             </div>
         </div>
@@ -24,59 +25,63 @@
                     <span class="pcoded-mcaret"></span>
                 </a>
             </li>
-            <li class="<?php if ($directory=="staff") {echo "active"; } else  {echo "pcoded-hasmenu";} ?>">
+            
+            <li class="pcoded-hasmenu <?php if ($directory=="staff") {echo " pcoded-trigger active"; } else  {echo " ";} ?>">
                 <a href="javascript:void(0)" class="waves-effect waves-dark">
-                    <span class="pcoded-micon"><i class="fa fa-id-card"></i></span>
+                    <span class="pcoded-micon"><i class="fas fa-user"></i></span>
                     Staff
                     <i class="fas fa-angle-down" style="float: right; padding-top: 6px;"></i>
                 </a>
                 <ul class="pcoded-submenu">
                     <li class="<?php if ($directory=="staff" && $first_part=="viewAll.php") {echo "active"; } else  {echo "";} ?>">
-                        <a href="accordion.html" class="waves-effect waves-dark">
-                            <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
-                            <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">View All</span>
+                        <a href="../staff/viewAll.php" class="waves-effect waves-dark">
+                            <span class="pcoded-micon"></span>
+                            <span class="pcoded-mtext"><i class="fas fa-eye"></i>&nbsp;&nbsp;View All</span>
                             <span class="pcoded-mcaret"></span>
                         </a>
                     </li>
                     <li class="<?php if ($directory=="staff" && $first_part=="createNew.php") {echo "active"; } else  {echo "";} ?>">
-                        <a href="breadcrumb.html" class="waves-effect waves-dark">
-                            <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
-                            <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs">Create New</span>
+                        <a href="../staff/createNew.php" class="waves-effect waves-dark">
+                            <span class="pcoded-micon"></i></span>
+                            <span class="pcoded-mtext"><i class="fas fa-user-plus"></i>&nbsp;&nbsp;Create New</span>
                             <span class="pcoded-mcaret"></span>
                         </a>
                     </li>
-                    <li class=" ">
-                        <a href="breadcrumb.html" class="waves-effect waves-dark">
-                            <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
-                            <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs">Attendance</span>
+                    <li class="<?php if ($directory=="staff" && $first_part=="attendance.php") {echo "active"; } else  {echo "";} ?>">
+                        <a href="../staff/attendance.php" class="waves-effect waves-dark">
+                            <span class="pcoded-micon"></i></span>
+                            <span class="pcoded-mtext"><i class="far fa-bell"></i>&nbsp;&nbsp;Attendance</span>
                             <span class="pcoded-mcaret"></span>
                         </a>
                     </li>
                 </ul>
             </li>
-            <li class="<?php if ($first_part=="") {echo "active"; } else  {echo "pcoded-hasmenu";} ?>">
+            
+            <li class="pcoded-hasmenu <?php if ($directory=="salaries") {echo " pcoded-trigger active"; } else  {echo " ";} ?>">
                 <a href="javascript:void(0)" class="waves-effect waves-dark">
-                    <span class="pcoded-micon"><i class="fas fa-money-bill-wave-alt"></i></span>
+                    <span class="pcoded-micon"><i class="fas fa-info"></i></span>
                     Salaries
                     <i class="fas fa-angle-down" style="float: right; padding-top: 6px;"></i>
                 </a>
                 <ul class="pcoded-submenu">
-                    <li class=" ">
-                        <a href="accordion.html" class="waves-effect waves-dark">
+                    <li class="<?php if ($directory=="salaries" && $first_part=="viewAll.php") {echo "active"; } else  {echo "";} ?>">
+                        <a href="../salaries/viewAll.php" class="waves-effect waves-dark">
                             <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
-                            <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">View All</span>
+                            <span class="pcoded-mtext"><i class="fas fa-eye"></i>&nbsp;&nbsp;View All</span>
                             <span class="pcoded-mcaret"></span>
                         </a>
                     </li>
-                    <li class=" ">
-                        <a href="breadcrumb.html" class="waves-effect waves-dark">
+                    <li class="<?php if ($directory=="salaries" && $first_part=="createNew.php") {echo "active"; } else  {echo "";} ?>">
+                        <a href="../salaries/createNew.php" class="waves-effect waves-dark">
                             <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
-                            <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs">Create New</span>
+                            <span class="pcoded-mtext"><i class="fas fa-plus-circle"></i>&nbsp;&nbsp;Create New</span>
                             <span class="pcoded-mcaret"></span>
                         </a>
                     </li>
                 </ul>
             </li>
+            
+            
             <li class="pcoded-hasmenu <?php if ($directory=="members") {echo " pcoded-trigger active"; } else  {echo " ";} ?>">
                 <a href="javascript:void(0)" class="waves-effect waves-dark">
                     <span class="pcoded-micon"><i class="fas fa-user"></i></span>

@@ -13,7 +13,7 @@
     if (isset($_POST['deleteData'])) {
         
         $snoDelete = $_POST['snoDelete'];
-        $sql = "DELETE FROM `payment` WHERE `id` = $snoDelete";
+        $sql = "DELETE FROM `salaries` WHERE `id` = $snoDelete";
         $result = mysqli_query($conn, $sql);
         
         
@@ -31,13 +31,13 @@
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if (isset($_POST['snoEdit'])) {
             $sno = $_POST["snoEdit"];
-            $members = mysqli_real_escape_string($conn, $_POST["memberEdit"]);
-            $paymentOfMonth = mysqli_real_escape_string($conn, $_POST["paymentOfMonth"]);
-            $isPaymentCleared = mysqli_real_escape_string($conn, $_POST["isPaymentCleared"]);
-            $paymentDate = mysqli_real_escape_string($conn, $_POST["paymentDate"]);
+            $staff = mysqli_real_escape_string($conn, $_POST["staffEdit"]);
+            $salaryAmount = mysqli_real_escape_string($conn, $_POST["salaryAmountEdit"]);
+            $isSalaryCleared = mysqli_real_escape_string($conn, $_POST["isSalaryClearedEdit"]);
+            $salaryDate = mysqli_real_escape_string($conn, $_POST["salaryDateEdit"]);
+            $salaryOfMonth = mysqli_real_escape_string($conn, $_POST["salaryOfMonthEdit"]);
             
-            $sql = "UPDATE `payment` SET `members` = $members, `paymentOfMonth` = '$paymentOfMonth', `isPaymentCleared` = $isPaymentCleared, `paymentDate` = '$paymentDate' WHERE `payment`.`id` = $sno";            
-            
+            $sql = "UPDATE `salaries` SET `staff` = $staff, `salaryAmount` = '$salaryAmount', `isSalaryCleared` = $isSalaryCleared, `salaryDate` = '$salaryDate', `salaryOfMonth` = '$salaryOfMonth' WHERE `salaries`.`id` = $sno";
             $result = mysqli_query($conn, $sql);
             if ($result) {
                 $update = true;
@@ -52,7 +52,7 @@
 <html lang="en">
 
     <head>
-        <title>VIEW PAYMENT :: Gym Management System</title>
+        <title>VIEW SALARIES :: Gym Management System</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -79,7 +79,7 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="editModalLabel">Edit This Payment</h5>
+                        <h5 class="modal-title" id="editModalLabel">Edit This Salary</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">×</span>
                         </button>
@@ -89,11 +89,11 @@
                             <input type="hidden" name="snoEdit" id="snoEdit">
                             
                             <div class="form-group">
-                                <label for="amount">Member</label>
-                                <select name="memberEdit" id="select" class="form-control">
-                                    <option value="0">Select Member</option>
+                                <label for="amount">Staff</label>
+                                <select name="staffEdit" id="selectStaff" class="form-control">
+                                    <option value="0">Select Staff</option>
                                     <?php 
-                                        $sql = "SELECT * FROM `members`";
+                                        $sql = "SELECT * FROM `staff`";
                                         $result = mysqli_query($conn, $sql);
                                         while ($row = mysqli_fetch_assoc($result)) {
                                             echo '<option value="' . $row['id'] . '">' . $row['firstName'] . ' ' . $row['lastName'] . '</option>';
@@ -103,8 +103,26 @@
                             </div>
                             
                             <div class="form-group">
-                                <label for="amount">Payment Of Month</label>
-                                <select name="paymentOfMonth" id="month" class="form-control">
+                                <label for="salaryAmountEdit">Salary Amount</label>
+                                <input type="text" class="form-control" id="salaryAmountEdit" name="salaryAmountEdit" MaxLength="5">
+                            </div>
+                            
+                            
+                            <div class="form-group">
+                                <label for="isSalaryClearedEdit">Is Salary Cleared: &nbsp;</label> 
+                                <label class="radio-inline"><input type="radio" id="salaryYes" name="isSalaryClearedEdit" value="1">&nbsp;YES</label>
+                                <label class="radio-inline"><input type="radio" id="salaryNo" name="isSalaryClearedEdit" value="0">&nbsp;NO</label>
+                            </div>
+                            
+                            
+                            <div class="form-group">
+                                <label for="salaryDateEdit">Salary Date</label>
+                                <input type="text" class="form-control" id="salaryDateEdit" name="salaryDateEdit" onfocus="(this.type = 'date')" onblur="(this.type = 'text')">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="salaryOfMonthEdit">Salary Of Month</label>
+                                <select name="salaryOfMonthEdit" id="salaryOfMonthEdit" class="form-control">
                                     <option value="0">Select Month</option>
                                     <option value="January">January</option>
                                     <option value="February">February</option>
@@ -119,18 +137,8 @@
                                     <option value="November">November</option>
                                     <option value="December">December</option>
                                 </select>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="isPaymentCleared">Is Payment Cleared: &nbsp;</label> 
-                                <label class="radio-inline"><input type="radio" id="memYes" name="isPaymentCleared" value="1">&nbsp;YES</label>
-                                <label class="radio-inline"><input type="radio" id="memNo" name="isPaymentCleared" value="0">&nbsp;NO</label>
-                            </div>                             
-                            
-                            <div class="form-group">
-                                <label for="paymentDate">Payment Date</label>
-                                <input type="text" class="form-control" id="paymentDate" name="paymentDate" onfocus="(this.type = 'date')" onblur="(this.type = 'text')">
-                            </div>
+                            </div>                            
+                             
                             
                         </div>
                         <div class="modal-footer d-block mr-auto">
@@ -149,7 +157,7 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">                        
-                        <h5 class="modal-title" id="deleteModalLabel"> Are You Sure You Want To Delete This Payment?</h5>
+                        <h5 class="modal-title" id="deleteModalLabel"> Are You Sure You Want To Delete This Salary?</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">×</span>
                         </button>
@@ -160,7 +168,7 @@
                         </div>
                         <div class="modal-footer d-block mr-auto">
                             <button type="button" class="btn waves-effect waves-light hor-grd btn-grd-info" data-dismiss="modal"> NO </button>
-                            <button type="submit" name="deleteData" class="btn waves-effect waves-light hor-grd btn-grd-danger">YES!! Delete Payment</button>
+                            <button type="submit" name="deleteData" class="btn waves-effect waves-light hor-grd btn-grd-danger">YES!! Salary Member</button>
                         </div>
                     </form>
                 </div>
@@ -182,7 +190,7 @@
                                     <div class="row align-items-center">
                                         <div class="col-md-8">
                                             <div class="page-header-title">
-                                                <h5 class="m-b-10">Payment</h5>
+                                                <h5 class="m-b-10">Salaries</h5>
                                                 <p class="m-b-0">View All Of Them</p>
                                             </div>
                                         </div>
@@ -193,7 +201,7 @@
                                 if ($update) {
                                     echo 
                                     "<div id='updateSuccess' class='alert alert-info alert-dismissible fade show' role='alert'>
-                                        <strong>SUCCESS!</strong> PAYMENT UPDATES
+                                        <strong>SUCCESS!</strong> SALARIES UPDATES
                                         <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
                                           <span aria-hidden='true'>×</span>
                                         </button>
@@ -202,7 +210,7 @@
                                 if ($delete) {
                                     echo 
                                     "<div id='deleteSuccess' class='alert alert-danger alert-dismissible fade show' role='alert'>
-                                        <strong>SUCCESS!</strong> PAYMENT DELETED
+                                        <strong>SUCCESS!</strong> SALARIES DELETED
                                         <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
                                           <span aria-hidden='true'>×</span>
                                         </button>
@@ -219,7 +227,7 @@
                                                 <div class="col-12">
                                                     <div class="card">
                                                         <div class="card-header">
-                                                            <h5>Currently Existing Payments</h5>
+                                                            <h5>Currently Existing Salaries</h5>
 <!--                                                            <span><code></code></span>-->
                                                             <div class="card-header-right">
                                                                 <ul class="list-unstyled card-option">
@@ -231,35 +239,37 @@
                                                         </div>
                                                         <div class="card-block table-border-style">
                                                             <div class="table-responsive">
-                                                                <table class="table table-hover" id="tblPayment">
+                                                                <table class="table table-hover" id="tblMembers">
                                                                     <thead>
                                                                         <tr>
                                                                             <th>SNo</th>
-                                                                            <th>Members</th>
-                                                                            <th>Payment Of Month</th>
-                                                                            <th>Is Payment Cleared</th>
-                                                                            <th>Payment Date</th>
-                                                                            <th style="display: none;">&nbsp;</th>
-                                                                            <th style="display: none;">&nbsp;</th>
+                                                                            <th>Staff</th>
+                                                                            <th>Salary Amount</th>
+                                                                            <th>Is Salary Cleared</th>
+                                                                            <th>Salary Date</th>
+                                                                            <th>Salary Of Month</th>
+                                                                            <th style="display: none;">Staff Id</th>
+                                                                            <th style="display: none;">Salary Of Month</th>
                                                                             <th>EDIT/DELETE</th>
                                                                         </tr>
                                                                     </thead>
                                                                     <tbody>
                                                                         <?php
-                                                                        $sql = "SELECT `payment`.`id`, `members`.`id` as `memberId`, CONCAT(`members`.`firstName`, ' ', `members`.`lastName`) as `memberName`, `payment`.`paymentOfMonth`, `payment`.`isPaymentCleared`, `payment`.`paymentDate`, DATE_FORMAT(`payment`.`paymentDate`, '%W, %D %M %Y') AS `paymentDate_` FROM `payment` JOIN `members` ON `payment`.`members` = `members`.`id`;";
+                                                                        $sql = "SELECT `salaries`.`id`, `staff`.`id` as `staffId`, `staff`.`firstName`, `staff`.`lastName`, `salaries`.`salaryAmount`, `salaries`.`isSalaryCleared`, `salaries`.`salaryDate`, `salaries`.`salaryOfMonth`, DATE_FORMAT(`salaries`.`salaryDate`, '%W, %D %M %Y') AS `salaryDateFormatted` FROM `salaries`, `staff` WHERE `staff`.id = `salaries`.staff;";
                                                                         $result = mysqli_query($conn, $sql);
                                                                         $sno = 0;
                                                                         while ($row = mysqli_fetch_assoc($result)) {
                                                                             $sno = $sno + 1;
-                                                                            $payment_ = $row['isPaymentCleared'] == 1 ? "YES" : "NO";
+                                                                            $salaryCleared = $row['isSalaryCleared'] == 1 ? "YES" : "NO";
                                                                             echo "<tr>
                                                                                     <th scope='row'>" . $sno . "</th>
-                                                                                    <td>" . $row['memberName'] . "</td>
-                                                                                    <td>" . $row['paymentOfMonth'] . "</td>
-                                                                                    <td>" . $payment_ . "</td>
-                                                                                    <td>" . $row['paymentDate_'] . "</td>
-                                                                                    <td style='display: none;'>" . $row['memberId'] . "</td>
-                                                                                    <td style='display: none;'>" . $row['paymentDate'] . "</td>
+                                                                                    <td>" . $row['firstName'] . ' ' . $row['lastName'] . "</td>
+                                                                                    <td>" . $row['salaryAmount'] . "</td>
+                                                                                    <td>" . $salaryCleared . "</td>
+                                                                                    <td>" . $row['salaryDateFormatted'] . "</td>
+                                                                                    <td>" . $row['salaryOfMonth'] . "</td>
+                                                                                    <td style='display: none;'>" . $row['staffId'] . "</td>
+                                                                                    <td style='display: none;'>" . $row['salaryDate'] . "</td>
                                                                                     <td> 
                                                                                     <button class='edit btn btn-sm waves-effect waves-light hor-grd btn-grd-warning' id=" . $row['id'] . " style='color: #20639B;'>"
                                                                                     . "<i class='far fa-edit'></i> EDIT"
@@ -315,8 +325,7 @@
         <script src="//cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
         <script>
             $(document).ready(function () {
-                $('#tblPayment').DataTable();
-                $('#packageID').hide();
+                $('#tblMembers').DataTable();
 
             });
         </script>
@@ -325,21 +334,24 @@
             Array.from(edits).forEach((element) => {
                 element.addEventListener("click", (e) => {
                     tr = e.target.parentNode.parentNode;
-                    member = tr.getElementsByTagName("td")[4].innerText;
-                    $('#select').val(member);
-                    month = tr.getElementsByTagName("td")[1].innerText;
-                    $('#month').val(month);
-                    isPaymentCleared = tr.getElementsByTagName("td")[2].innerText;
-                    if (isPaymentCleared.toString() === "YES") 
+                    staff = tr.getElementsByTagName("td")[5].innerText;
+                    $('#selectStaff').val(staff);
+                    salaryAmount = tr.getElementsByTagName("td")[1].innerText;
+                    salaryAmountEdit.value = salaryAmount;
+                    isSalaryCleared = tr.getElementsByTagName("td")[2].innerText;
+                    if (isSalaryCleared.toString() === "YES") 
                     {
-                        $('#memYes').prop("checked", true);                     
+                        $('#salaryYes').prop("checked", true);                     
                     } 
-                    else if (isPaymentCleared.toString() === "NO")
+                    else if (isMembershipValid.toString() === "NO")
                     {
-                        $('#memNo').prop("checked", true);; 
+                        $('#salaryNo').prop("checked", true);; 
                     }
-                    paymentDate = tr.getElementsByTagName("td")[5].innerText;
-                    $("#paymentDate").val(paymentDate);
+                    salaryDate = tr.getElementsByTagName("td")[6].innerText;
+                    salaryDateEdit.value = salaryDate;
+                    salaryOfMonth = tr.getElementsByTagName("td")[4].innerText;
+                    $('#salaryOfMonthEdit').val(salaryOfMonth);
+                    
                     snoEdit.value = e.target.id;
                     $('#editModal').modal('toggle');
                 });
@@ -374,6 +386,26 @@
                 });
             }, 3000);
             });            
+        </script>
+        <script type="text/javascript">
+            $('input[name="salaryEdit"]').keydown(function () {    
+
+                if ( event.ctrlKey || event.altKey 
+                    || (47<event.keyCode && event.keyCode<58 && event.shiftKey==false) 
+                    || (95<event.keyCode && event.keyCode<106)
+                    || (event.keyCode==8) || (event.keyCode==9) 
+                    || (event.keyCode>34 && event.keyCode<40) 
+                    || (event.keyCode==46) )
+                    return;
+                if ((event.keyCode < 48 || event.keyCode > 57))
+                    event.preventDefault();
+
+                var length = $(this).val().length;
+
+                if (length == 5 || length == 13)
+                    $(this).val($(this).val() + '-');
+
+            }); 
         </script>
     </body>
 </html>

@@ -1,75 +1,103 @@
 <?php
-    if (session_status() == PHP_SESSION_NONE) {
-        session_start();
-    }
-    if (!isset($_SESSION['username'])) {
-        header('location: ../login.php');
-    }
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+if (!isset($_SESSION['username'])) {
+    header('location: ../login.php');
+}
 
-    include '../db.php';
-    $insert = false;
-    $usernameExists = false;
+include '../db.php';
+$insert = false;
+$usernameExists = false;
 
-    if (isset($_POST['btnSubmitDetails'])) {
-        $firstNameEdit = mysqli_real_escape_string($conn, $_POST['firstNameEdit']);
-        $lastNameEdit = mysqli_real_escape_string($conn, $_POST['lastNameEdit']);
-        $usernameEdit = mysqli_real_escape_string($conn, $_POST['usernameEdit']);
+if (isset($_POST['btnSubmitDetails'])) {
+    $firstNameEdit = mysqli_real_escape_string($conn, $_POST['firstNameEdit']);
+    $lastNameEdit = mysqli_real_escape_string($conn, $_POST['lastNameEdit']);
+    $usernameEdit = mysqli_real_escape_string($conn, $_POST['usernameEdit']);
 
-        if (!empty($firstNameEdit) || !empty($lastNameEdit) || !empty($usernameEdit)) {
-            $username_ = $_SESSION['username'];
-            $updateQuery = "UPDATE `admin` SET `username` = '$usernameEdit', `firstName` = '$firstNameEdit', `lastName` = '$lastNameEdit' WHERE `username` = '$username_'";
-            $result = mysqli_query($conn, $updateQuery);
-            if ($result) {
-                header('location: ../logout.php');
-            } else {
-                echo '<script language="javascript"> alert(' . mysqli_error($conn) . ') </script>';
-            }
+    if (!empty($firstNameEdit) || !empty($lastNameEdit) || !empty($usernameEdit)) {
+        $username_ = $_SESSION['username'];
+        $updateQuery = "UPDATE `admin` SET `username` = '$usernameEdit', `firstName` = '$firstNameEdit', `lastName` = '$lastNameEdit' WHERE `username` = '$username_'";
+        $result = mysqli_query($conn, $updateQuery);
+        if ($result) {
+            header('location: ../logout.php');
+        } else {
+            echo '<script language="javascript"> alert(' . mysqli_error($conn) . ') </script>';
         }
-    } else if (isset($_POST['btnSubmitPassword'])) {
-        $currentPasswordEdit = mysqli_real_escape_string($conn, $_POST['currentPasswordEdit']);
-        $newPasswordEdit = mysqli_real_escape_string($conn, $_POST['newPasswordEdit']);
-        $confirmPasswordEdit = mysqli_real_escape_string($conn, $_POST['confirmPasswordEdit']);
+    }
+} else if (isset($_POST['btnSubmitPassword'])) {
+    $currentPasswordEdit = mysqli_real_escape_string($conn, $_POST['currentPasswordEdit']);
+    $newPasswordEdit = mysqli_real_escape_string($conn, $_POST['newPasswordEdit']);
+    $confirmPasswordEdit = mysqli_real_escape_string($conn, $_POST['confirmPasswordEdit']);
 
-        if (!empty($currentPasswordEdit) || !empty($newPasswordEdit) || !empty($confirmPasswordEdit)) {
-            if ($newPasswordEdit === $confirmPasswordEdit) {
-                $username_ = $_SESSION['username'];
-                $sqlUsername = "SELECT * FROM admin WHERE username='$username_'";                
-                $result = mysqli_query($conn, $sqlUsername);
-                $usernameCount = mysqli_num_rows($result);                
-                if ($usernameCount > 0) {
-                    $usernamePassword = mysqli_fetch_assoc($result);
-                    $dbPass = $usernamePassword['password'];                    
+    if (!empty($currentPasswordEdit) || !empty($newPasswordEdit) || !empty($confirmPasswordEdit)) {
+        if ($newPasswordEdit === $confirmPasswordEdit) {
+            $username_ = $_SESSION['username'];
+            $sqlUsername = "SELECT * FROM admin WHERE username='$username_'";
+            $result = mysqli_query($conn, $sqlUsername);
+            $usernameCount = mysqli_num_rows($result);
+            if ($usernameCount > 0) {
+                $usernamePassword = mysqli_fetch_assoc($result);
+                $dbPass = $usernamePassword['password'];
 
-                    $passDecode = password_verify($currentPasswordEdit, $dbPass);
-                    
-                    if ($passDecode) {                        
-                        $encryptedNewPassword = password_hash($newPasswordEdit, PASSWORD_BCRYPT);
-                        $updateQuery = "UPDATE `admin` SET `password` = '$encryptedNewPassword' WHERE `username` = '$username_'";
-                        $result = mysqli_query($conn, $updateQuery);
-                        if ($result) {
-                            header('location: ../logout.php');
-                        } else {
-                            echo '<script language="javascript"> alert(' . mysqli_error($conn) . ') </script>';
-                        }
+                $passDecode = password_verify($currentPasswordEdit, $dbPass);
+
+                if ($passDecode) {
+                    $encryptedNewPassword = password_hash($newPasswordEdit, PASSWORD_BCRYPT);
+                    $updateQuery = "UPDATE `admin` SET `password` = '$encryptedNewPassword' WHERE `username` = '$username_'";
+                    $result = mysqli_query($conn, $updateQuery);
+                    if ($result) {
+                        header('location: ../logout.php');
                     } else {
-                            echo '<script language="javascript"> alert("Couldn\t Verify Password") </script>';
+                        echo '<script language="javascript"> alert(' . mysqli_error($conn) . ') </script>';
                     }
                 } else {
-                    echo '<script language="javascript"> alert("User Not Found") </script>';
-                }                
+                    echo '<script language="javascript"> alert("Couldn\t Verify Password") </script>';
+                }
             } else {
-                echo '<script language="javascript"> alert("New Password & Confirm Password Fields Don\'t Match") </script>';
+                echo '<script language="javascript"> alert("User Not Found") </script>';
             }
         } else {
-            echo '<script language="javascript"> alert("No Field Should Be Empty") </script>';
+            echo '<script language="javascript"> alert("New Password & Confirm Password Fields Don\'t Match") </script>';
+        }
+    } else {
+        echo '<script language="javascript"> alert("No Field Should Be Empty") </script>';
+    }
+}
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit'])) {
+    $firstName = mysqli_real_escape_string($conn, $_POST['firstName']);
+    $lastName = mysqli_real_escape_string($conn, $_POST['lastName']);
+    $username = mysqli_real_escape_string($conn, $_POST['username']);
+    $password = mysqli_real_escape_string($conn, $_POST['password']);
+
+    $encryptedPassword = password_hash($password, PASSWORD_BCRYPT);
+
+    $usernameQuery = "SELECT * FROM admin WHERE username='$username'";
+    $result = mysqli_query($conn, $usernameQuery);
+
+    $usernameCount = mysqli_num_rows($result);
+
+    if ($usernameCount > 0) {
+        $usernameExists = true;
+    } else {
+        $insertQuery = "INSERT INTO admin (username, firstName, lastName, password) VALUES ('$username', '$firstName', '$lastName', '$encryptedPassword')";
+
+        $insertResult = mysqli_query($conn, $insertQuery);
+
+        if ($insertResult) {
+            $insert = true;
+        } else {
+            echo '<script language="javascript"> alert(' . mysqli_error($conn) . ') </script>';
         }
     }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
 
     <head>
-        <title>ADD A NEW ADMINISTRATOR :: Gym Management System</title>
+        <title>ADMINISTRATOR'S PROFILE :: Gym Management System</title>
 <?php include '../css/style.php'; ?>
     </head>
 
@@ -179,6 +207,27 @@
                                     </div>
                                 </div>
                             </div>
+                            
+                            <?php
+                                if ($insert) {
+                                    echo 
+                                    "<div id='insertAlert' class='alert alert-info alert-dismissible fade show' role='alert'>
+                                        <strong>SUCCESS!</strong> NEW ADMIN HAS BEEN ADDED
+                                        <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+                                          <span aria-hidden='true'>×</span>
+                                        </button>
+                                      </div>";
+                                }
+                                if ($usernameExists) {
+                                    echo 
+                                    "<div id='usernameAlert' class='alert alert-danger alert-dismissible fade show' role='alert'>
+                                        <strong>WARNING!</strong> USERNAME ALREADY REGISTERED
+                                        <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+                                          <span aria-hidden='true'>×</span>
+                                        </button>
+                                      </div>";
+                                }
+                            ?>
 
                             <div class="pcoded-inner-content">
                                 <!-- Main-body start -->
@@ -186,16 +235,50 @@
                                     <div class="page-wrapper">
                                         <!-- Page-body start -->
                                         <div class="page-body">
-                                            <div class="row">
-                                                <div class="offset-4 col-4">
+                                            <div class="row m-t-0">
+                                                <div class="col-8">
+
+                                                    <div class="card">
+                                                        <div class="card-header">
+                                                            <h5>Enter New Admin's Information</h5>
+                                                        </div>
+                                                        <div class="card-block">
+                                                            <form class="form-material" action="<?php echo htmlentities($_SERVER['PHP_SELF']); ?>" method="POST">
+                                                                <div class="form-group form-default">
+                                                                    <input type="text" name="firstName" class="form-control" required="">
+                                                                    <span class="form-bar"></span>
+                                                                    <label class="float-label">First Name</label>
+                                                                </div>
+                                                                <div class="form-group form-default">
+                                                                    <input type="text" name="lastName" class="form-control" required="">
+                                                                    <span class="form-bar"></span>
+                                                                    <label class="float-label">Last Name</label>
+                                                                </div>
+                                                                <div class="form-group form-default">
+                                                                    <input type="text" name="username" class="form-control" required="">
+                                                                    <span class="form-bar"></span>
+                                                                    <label class="float-label">Username</label>
+                                                                </div>
+                                                                <div class="form-group form-default">
+                                                                    <input type="text" name="password" class="form-control" required="" onfocus="(this.type = 'password')">
+                                                                    <span class="form-bar"></span>
+                                                                    <label class="float-label">Password</label>
+                                                                </div>
+                                                                <div>
+                                                                    <button class="btn waves-effect waves-light hor-grd btn-grd-info " type="submit" name="submit">
+                                                                        <i class="fas fa-plus"></i> Add Administrator
+                                                                    </button>
+                                                                    <!--                                                                    <a href="../members/viewAll.php" class="btn waves-effect waves-light hor-grd btn-grd-info" style="color:white;">
+                                                                                                                                            <i class="fas fa-eye"></i> See All Member
+                                                                                                                                        </a>-->
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-4">
                                                     <div class="auth-box card">
                                                         <div class="card-block">
-                                                            <div class="row m-b-15">
-                                                                <div class="col-md-12">
-                                                                    <img src="../img/avatar.png" alt="John" style="width:100%;">
-                                                                </div>
-                                                            </div>
-                                                            <hr>
                                                             <div class="row m-b-15">
                                                                 <div class="col-md-12">
                                                                     <h3 class="text-center txt-primary"><?php echo $_SESSION['firstName'] . ' ' . $_SESSION['lastName']; ?></h3>
@@ -263,10 +346,30 @@
         $('#btnDetails').click(function () {
             $('#detailsModal').modal('toggle');
         });
-        
+
         $('#btnPass').click(function () {
             $('#passwordModal').modal('toggle');
         });
     </script>
 
+    <script type="text/javascript">
+            $(document).ready(function () {
+            window.setTimeout(function() {
+                $("#insertAlert").fadeTo(1000, 0).slideUp(1000, function(){
+                    $(this).remove(); 
+                });
+            }, 3000);
+            });
+            
+        </script>
+        <script type="text/javascript">
+            $(document).ready(function () {
+            window.setTimeout(function() {
+                $("#usernameAlert").fadeTo(1000, 0).slideUp(1000, function(){
+                    $(this).remove(); 
+                });
+            }, 3000);
+            });            
+        </script>
+    
 </html>

@@ -111,7 +111,7 @@
                                                                     <label class="float-label">Package Name</label>
                                                                 </div>
                                                                 <div class="form-group form-default">
-                                                                    <input type="number" class="form-control" required="" name="amount">
+                                                                    <input type="text" class="form-control" required="" name="amount">
                                                                     <span class="form-bar"></span>
                                                                     <label class="float-label">Package Amount</label>
                                                                 </div>                                                                
@@ -178,6 +178,25 @@
 
             });
             
+            $('input[name="amount"]').keydown(function () {    
+
+                if ( event.ctrlKey || event.altKey 
+                    || (47<event.keyCode && event.keyCode<58 && event.shiftKey==false) 
+                    || (95<event.keyCode && event.keyCode<106)
+                    || (event.keyCode==8) || (event.keyCode==9) 
+                    || (event.keyCode>34 && event.keyCode<40) 
+                    || (event.keyCode==46) )
+                    return;
+                if ((event.keyCode < 48 || event.keyCode > 57))
+                    event.preventDefault();
+
+                var length = $(this).val().length;
+
+                if (length == 5 || length == 13)
+                    $(this).val($(this).val() + '-');
+
+            });
+            $('input[name="amount"]').attr('maxlength', 6);
         </script>
             
     </body>

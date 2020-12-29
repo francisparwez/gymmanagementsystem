@@ -61,7 +61,7 @@ if (isset($_POST['btnSubmit'])) {
         <link href="css/styles.css" rel="stylesheet" type="text/css"/>
     </head>
     <body>
-        <section class="Form mx-5">
+        <section class="Form mx-5 my-4">
             <div class="container">
                 <div class="row no-gutters">
                     <div class="col-lg-5">
@@ -86,7 +86,7 @@ if (isset($_POST['btnSubmit'])) {
                                     <button type="submit" name="btnSubmit" class="btn-login mt-3 mb-5">Login</button>
                                 </div>
                             </div>
-                            <a href="#"> <p class="text-center"> Forget Password? </p> </a>
+<!--                            <a href="#"> <p class="text-center"> Forget Password? </p> </a>-->
                         </form>
                     </div>
                 </div>            

@@ -82,13 +82,18 @@ include '../db.php';
                                                         <div class="card-block">
                                                             <div class="row align-items-center">
                                                                 <div class="col-8">
-                                                                    <h4 class="text-c-green">Rs. 
-                                                                            <?php
-                                                                            $sql = "SELECT SUM(`packages`.`amount`) AS `totalPaymentPending` FROM `members`, `packages`, `payment` WHERE `members`.`packages` = `packages`.`id` AND `members`.`id` = `payment`.`members` AND `payment`.`isPaymentCleared` = 0;";
-                                                                            $result = mysqli_query($conn, $sql);
-                                                                            while ($row = mysqli_fetch_assoc($result)) {
-                                                                                echo $row['totalPaymentPending'];
+                                                                    <h4 class="text-c-green">
+                                                                        <?php
+                                                                        $sql = "SELECT SUM(`packages`.`amount`) AS `totalPaymentPending` FROM `members`, `packages`, `payment` WHERE `members`.`packages` = `packages`.`id` AND `members`.`id` = `payment`.`members` AND `payment`.`isPaymentCleared` = 0;";
+                                                                        $result = mysqli_query($conn, $sql);
+                                                                        while ($row = mysqli_fetch_assoc($result)) {
+                                                                            $totalPaymentPending = $row['totalPaymentPending'];
+                                                                            if ($totalPaymentPending == 0) {
+                                                                                echo "No Payment Pending";
+                                                                            } else {
+                                                                                echo "Rs. $totalPaymentPending";
                                                                             }
+                                                                        }
                                                                         ?>
                                                                     </h4>
                                                                     <h6 class="text-muted m-b-0">Members Payments Pending</h6>
@@ -154,6 +159,48 @@ include '../db.php';
                                     <div id="styleSelector"> </div>
                                 </div>
                             </div>
+
+                            <div class="col-xl-8 col-md-12">
+                                <div class="card table-card">
+                                    <div class="card-header">
+                                        <h3>Top Application Users</h3>
+                                    </div>
+                                    <div class="card-block">
+                                        <div class="table-responsive">
+                                            <table class="table table-hover">
+                                                <thead>
+                                                    <tr>
+                                                        <th>SNo</th>
+                                                        <th>First Name</th>
+                                                        <th>Last Name</th>
+                                                        <th>Username</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <?php
+                                                    $sql = "SELECT * FROM `admin` ORDER BY `admin`.`dateOfCreation` ASC LIMIT 3;";
+                                                    $result = mysqli_query($conn, $sql);
+                                                    $sno = 0;
+                                                    while ($row = mysqli_fetch_assoc($result)) {
+                                                        $sno = $sno + 1;
+                                                        echo "<tr>
+                                                                <th scope='row'>" . $sno . "</th>
+                                                                <td>" . $row['firstName'] . "</td>
+                                                                <td>" . $row['lastName'] . "</td>
+                                                                <td>" . $row['username'] . "</td> 
+                                                              </tr>";
+                                                    }
+                                                    ?>                                                    
+                                                </tbody>
+                                            </table>
+                                            <div class="text-right m-r-20">
+                                                <a href="../admin/profile.php" class=" b-b-primary text-primary">See Your Profile</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                 </div>
